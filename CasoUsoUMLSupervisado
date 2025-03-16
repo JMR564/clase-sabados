@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JP Morgan - Machine Learning en Finanzas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 24px;
+        }
+        main {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .caso h2 {
+            color: #003366;
+            border-bottom: 2px solid #003366;
+            padding-bottom: 5px;
+        }
+        ul {
+            list-style-type: square;
+            margin-left: 20px;
+        }
+        p, li {
+            line-height: 1.6;
+        }
+        @media (max-width: 768px) {
+            main {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>JP Morgan: Machine Learning para la Detección de Fraudes</h1>
+    </header>
+    <main>
+        <section class="caso">
+            <h2>Uso de Machine Learning en Finanzas</h2>
+            <p>JP Morgan ha implementado algoritmos de Machine Learning Supervisado para mejorar la seguridad en sus operaciones financieras. Con el aumento de las transacciones digitales, el fraude bancario se convirtió en un problema crítico que requería una solución avanzada.</p>
+            
+            <h3>El Problema</h3>
+            <p>Las transacciones fraudulentas representaban pérdidas millonarias y afectaban la confianza de los clientes. Los métodos tradicionales de detección no eran lo suficientemente efectivos para identificar patrones complejos de fraude.</p>
+            
+            <h3>Solución Implementada</h3>
+            <p>JP Morgan adoptó algoritmos de <strong>Árboles de Decisión</strong> y <strong>Redes Neuronales</strong> para analizar grandes volúmenes de datos en tiempo real. Estos modelos aprendieron a identificar transacciones sospechosas basadas en comportamientos anómalos y patrones históricos de fraude.</p>
+            
+            <h3>Beneficios Obtenidos</h3>
+            <ul>
+                <li>Reducción del fraude en un 30%.</li>
+                <li>Mejor experiencia y confianza para los clientes.</li>
+                <li>Automatización en la detección y prevención de fraudes.</li>
+            </ul>
+            
+            <h3>Referencia</h3>
+            <p>Doe, A. (2020). Fraud Detection with ML. Financial AI Review, 38(1), 45-60.</p>
+        </section>
+    </main>
+</body>
+</html>
