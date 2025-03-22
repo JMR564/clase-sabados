@@ -1,3 +1,2 @@
 pip freeze > requirements.txt
-Creación Procfile
 web: gunicorn app:app
