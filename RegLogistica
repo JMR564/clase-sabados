@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regresión Logística: Conceptos y Casos de Uso</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #0077b6;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+        main {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #023e8a;
+        }
+        section {
+            margin-bottom: 20px;
+        }
+        iframe {
+            display: block;
+            margin: 0 auto;
+            border: 2px solid #0077b6;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Regresión Logística: Conceptos y Casos de Uso</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Descripción</h2>
+            <p>La regresión logística es un algoritmo de clasificación binaria que se utiliza para predecir la probabilidad de que una observación pertenezca a una clase.</p>
+        </section>
+        <section>
+            <h2>Mapa de Casos de Uso</h2>
+            <p>Puedes ver el mapa mental de los casos de uso en el siguiente enlace:</p>
+            <a href="https://mm.tt/app/map/3240586408?t=YXOidDnSJq" target="_blank" style="color: #0077b6; font-weight: bold;">Ver Mapa Mental</a>
+        </section>
+        
+        <section>
+            <h2>Casos de Uso</h2>
+            <h3>1. Predicción de Casos de Malaria</h3>
+            <p>Modelo basado en parámetros hematológicos y edad de los pacientes para predecir la presencia de malaria.</p>
+            
+            <h3>2. Cálculo de Riesgo de Asma</h3>
+            <p>Modelo aplicado en Pinar del Río, Cuba, para identificar factores de riesgo en pacientes pediátricos.</p>
+            
+            <h3>3. Análisis de Precipitación</h3>
+            <p>Aplicación de regresión logística en la cuenca del río Torbes, Venezuela, para detectar patrones climatológicos.</p>
+        </section>
+    </main>
+</body>
+</html>
