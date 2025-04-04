@@ -1,0 +1,234 @@
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
+from io import BytesIO
+import base64
+
+notas = [30, 25, 20, 40, 45, 10, 50, 35, 25, 20]
+asistencia = [1, 0, 1, 1, 1, 0, 1, 1, 1, 0]
+participacion = [0, 0, 0, 1, 1, 0, 1, 0, 0, 0]
+tipo_colegio = ['Pr', 'Pu', 'Pu', 'Pu', 'Pr', 'Pu', 'Pr', 'Pu', 'Pu', 'Pr']
+
+
+aprobado = [1 if nota >= 30 else 0 for nota in notas]
+
+
+df = pd.DataFrame({
+    'Notas': notas,
+    'Asistencia': asistencia,
+    'Participacion': participacion,
+    'Tipo_Colegio': tipo_colegio,
+    'Aprobado': aprobado
+})
+
+
+le = LabelEncoder()
+df['Tipo_Colegio'] = le.fit_transform(df['Tipo_Colegio'])  # Pr -> 1, Pu -> 0
+
+
+X = df[['Notas', 'Asistencia', 'Participacion', 'Tipo_Colegio']]
+y = df['Aprobado']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+
+modelo = LogisticRegression()
+modelo.fit(X_train, y_train)
+
+
+y_pred = modelo.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+
+
+print(f'Accuracy: {accuracy:.2f}')
+print(f'Precision: {precision:.2f}')
+print(f'Recall: {recall:.2f}')
+print('Matriz de Confusión:')
+print(conf_matrix)
+
+def plot_confusion_matrix():
+    plt.figure(figsize=(5, 4))
+    sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=['No Aprobado', 'Aprobado'], yticklabels=['No Aprobado', 'Aprobado'])
+    plt.xlabel('Predicción')
+    plt.ylabel('Real')
+    plt.title('Matriz de Confusión')
+    img = BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    return base64.b64encode(img.getvalue()).decode()
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Predicción de Aprobación</title>
+    <style>
+        body {
+            background-color: #f1f3f5;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 25px;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+
+        .form-container label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .form-container input,
+        .form-container select {
+            width: 100%;
+            padding: 8px 12px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            box-sizing: border-box;
+        }
+
+        .form-container button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .resultados {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .resultados h1, .resultados h2 {
+            color: #212529;
+            text-align: center;
+        }
+
+        .resultados p {
+            font-size: 18px;
+            color: #343a40;
+            margin: 10px 0;
+        }
+
+        .resultados img {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h1>Regresión Logística - Predicción de Aprobación</h1>
+    <form action="/regresioncol" method="post">
+        <label for="notas">Notas:</label>
+        <input type="number" name="notas" step="0.1" required>
+        
+        <label for="asistencia">Asistencia (1: Sí, 0: No):</label>
+        <input type="number" name="asistencia" min="0" max="1" required>
+        
+        <label for="participacion">Participación (1: Sí, 0: No):</label>
+        <input type="number" name="participacion" min="0" max="1" required>
+        
+        <label for="tipo_colegio">Tipo de Colegio:</label>
+        <select name="tipo_colegio" required>
+            <option value="Pr">Privado</option>
+            <option value="Pu">Público</option>
+        </select>
+        
+        <button type="submit">Predecir</button>
+    </form>
+</div>
+
+<div class="resultados">
+    {% if resultado %}
+        <h1>Resultados de la Predicción</h1>
+        <p><strong>Resultado:</strong> {{ resultado }}</p>
+        <p><strong>Precisión:</strong> {{ precision }}</p>
+        <p><strong>Recall:</strong> {{ recall }}</p>
+        <p><strong>Exactitud:</strong> {{ accuracy }}</p>
+        
+        <h2>Matriz de Confusión</h2>
+        <img src="data:image/png;base64,{{ matriz_img }}" alt="Matriz de Confusión">
+    {% else %}
+        <p>No se realizó ninguna predicción.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
+
+@app.route('/regresioncol', methods=['GET', 'POST'])
+def regresion_col():
+    if request.method == 'POST':
+        try:
+            notas = float(request.form['notas'])  
+            asistencia = int(request.form['asistencia'])
+            participacion = int(request.form['participacion'])
+            tipo_colegio = request.form['tipo_colegio']
+
+            print(f"Datos recibidos: {notas}, {asistencia}, {participacion}, {tipo_colegio}")
+
+            tipo_colegio = le.transform([tipo_colegio])[0]
+
+            print(f"Tipo colegio transformado: {tipo_colegio}")
+
+            
+            prediccion = modelo.predict([[notas, asistencia, participacion, tipo_colegio]])[0]
+            resultado = 'Aprobado' if prediccion == 1 else 'No Aprobado'
+
+            print(f"Predicción realizada: {resultado}")
+
+            
+            matriz_img = plot_confusion_matrix()
+
+            return render_template('regresioncol.html', resultado=resultado, accuracy=accuracy, precision=precision, recall=recall, matriz_img=matriz_img)
+
+        except Exception as e:
+            print(f"Error en la predicción: {str(e)}")
+            return f"Error en la predicción: {str(e)}", 500  
+    
+    return render_template("regresioncol.html")  
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+
