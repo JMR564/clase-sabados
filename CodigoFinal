@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles del Modelo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .detalle-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 700px;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        .atributo {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .boton-volver {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #2980b9;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .boton-volver:hover {
+            background-color: #3498db;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="detalle-container">
+        <h1>{{ modelo['TipoModelo'] }}</h1>
+        <p class="atributo"><strong>Descripción:</strong> {{ modelo['Descripcion'] }}</p>
+        <p class="atributo"><strong>Uso:</strong> {{ modelo['Uso'] }}</p>
+        <p class="atributo"><strong>Referencia:</strong> {{ modelo['Referencia'] }}</p>
+
+        {% if modelo['Imagen'] %}
+        <img src="{{ url_for('static', filename=modelo['Imagen']) }}" alt="Imagen del Modelo" style="width:100%; max-width:500px; margin-top:20px;">
+        {% endif %}
+
+        <a href="{{ url_for('ver_modelos') }}" class="boton-volver">Volver al menú</a>
+    </div>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Modelos de Machine Learning</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .modelo {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin: 15px;
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+        }
+
+        h3 {
+            color: #2c3e50;
+        }
+
+        .boton-ver {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #2980b9;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .boton-ver:hover {
+            background-color: #3498db;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Modelos de Machine Learning</h1>
+        <p>Selecciona un modelo para ver más detalles</p>
+    </div>
+
+    <div class="container">
+        {% for modelo in modelos %}
+            <div class="modelo">
+                <h3>{{ modelo['TipoModelo'] }}</h3>
+                <a href="{{ url_for('ver_modelo', id_modelo=modelo['IdModelosML']) }}" class="boton-ver">Ver Detalles</a>
+            </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
+
+import mysql.connector
+
+def obtener_modelos():
+    conexion = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="machine"
+    )
+    cursor = conexion.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM modelosml")
+    modelos = cursor.fetchall()
+    conexion.close()
+    
+    print("Modelos obtenidos: ", modelos)  # Depuración
+    return modelos
+
+@app.route('/modelos/')
+def ver_modelos():
+    modelos = obtener_modelos()
+    return render_template("todo_en_uno.html", modelos=modelos)
+
+@app.route('/modelos/<id_modelo>')
+def ver_modelo(id_modelo):
+    modelos = obtener_modelos()
+    modelo_data = next((m for m in modelos if str(m['IdModelosML']) == id_modelo), None)
+    if not modelo_data:
+        return "Modelo no encontrado", 404
+    return render_template("detalle_modelo.html", modelo=modelo_data)
